@@ -1,0 +1,29 @@
+{
+  "name": "wundernut13",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "=============== B U I L D ===============": "===============",
+    "build": "turbo run build",
+    "=============== T E S T ===============": "===============",
+    "test": "turbo run test",
+    "=============== A P P   F R O N T E N D ===============": "===============",
+    "frontend:build": "turbo run build:prod:cf --filter=@urbanisierung/wundernut13-frontend --no-cache",
+    "wundernut": "pnpm --filter @urbanisierung/wundernut13 run wundernut",
+    "wundernutui": "pnpm --filter @urbanisierung/wundernut13-frontend run start",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "prettier": "latest",
+    "turbo": "1.10.14"
+  },
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=16.0.0"
+  }
+}

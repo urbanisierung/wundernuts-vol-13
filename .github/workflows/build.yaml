@@ -1,0 +1,13 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - "**"
+      - "!main"
+    tags-ignore:
+      - "*"
+
+jobs:
+  build:
+    uses: magic-dev-tools/github-workflow-templates/.github/workflows/build-monorepo.yaml@main

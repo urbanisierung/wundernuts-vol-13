@@ -1,0 +1,57 @@
+@use "@carbon/react" as * with (
+	$font-path: "https://fonts.urbanisierung.dev"
+);
+@use "@carbon/react/scss/themes";
+@use "@carbon/react/scss/theme";
+@use "@carbon/react/scss/grid";
+@use "@carbon/type";
+// @use "@carbon/charts/styles";
+// @use "@carbon/layout";
+@include grid.flex-grid();
+@include type.type-classes();
+
+.cds--g100 {
+	@include theme.theme(themes.$g100);
+}
+
+.cds--g90 {
+	@include theme.theme(themes.$g100);
+}
+
+.cds--g10 {
+	@include theme.theme(themes.$g10);
+}
+
+.cds--white {
+	@include theme.theme(themes.$g10);
+}
+
+h1 {
+	@include type-style("heading-04");
+}
+
+h2 {
+	@include type-style("heading-03");
+}
+
+h3 {
+	@include type-style("heading-02");
+}
+
+h4 {
+	@include type-style("heading-01");
+}
+
+p,
+.bodyText {
+	@include type-style("body-01");
+}
+
+.cds--content {
+	min-height: calc(100vh - 3rem);
+
+	&.withTopBanner {
+		margin-top: 6rem;
+		min-height: calc(100vh - 6rem);
+	}
+}

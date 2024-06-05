@@ -1,0 +1,35 @@
+{
+  "name": "@urbanisierung/wundernut13",
+  "version": "0.0.1",
+  "description": "Solution for Wundernut 13",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "browser": {
+    "./dist/index.js": "./src/index.ts",
+    "./dist/index.d.ts": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --p ./tsconfig.json",
+    "test": "glob -c \"node --import tsx --no-warnings --test\" \"./src/tests/**/*.test.ts\"",
+    "run-example": "ts-node ./src/run-example.ts",
+    "wundernut": "ts-node ./src/cli.ts"
+  },
+  "author": "@urbanisierung",
+  "license": "UNLICENSED",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "eslint-config-custom": "workspace:*",
+    "glob": "^10.4.1",
+    "prettier": "^3.0.0",
+    "ts-node": "^10.0.0",
+    "tsconfig": "workspace:*",
+    "tsx": "^4.11.2",
+    "typescript": "5.2.2"
+  }
+}

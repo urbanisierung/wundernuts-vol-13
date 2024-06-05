@@ -1,0 +1,52 @@
+{
+	"name": "@urbanisierung/wundernut13-frontend",
+	"version": "0.0.1",
+	"scripts": {
+		"start": "vite --mode dev --force",
+		"build:prod:cf": "vite build --mode prod --outDir dist"
+	},
+	"dependencies": {
+		"@urbanisierung/wundernut13": "workspace:*",
+		"@carbon/react": "1.51.0",
+		"@carbon/type": "^11.25.0",
+		"i18next": "23.6.0",
+		"i18next-xhr-backend": "3.2.2",
+		"mobx": "6.10.2",
+		"mobx-react": "9.0.1",
+		"mobx-react-lite": "4.0.5",
+		"mobx-router": "1.0.0",
+		"mobx-state-tree": "5.3.0",
+		"mst-middlewares": "5.2.0",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
+		"react-i18next": "13.3.1",
+		"styled-components": "^6.0.7"
+	},
+	"devDependencies": {
+		"@rollup/plugin-replace": "^5.0.5",
+		"@tauri-apps/cli": "^1.5.9",
+		"@types/carbon-components-react": "7.55.5",
+		"@types/event-source-polyfill": "1.0.3",
+		"@types/node": "20.8.9",
+		"@types/prop-types": "^15.7.5",
+		"@types/react": "18.2.33",
+		"@types/react-dom": "18.2.14",
+		"@types/semver": "^7.5.0",
+		"@types/styled-components": "^5.1.26",
+		"@vite-pwa/assets-generator": "^0.0.10",
+		"@vitejs/plugin-react": "4.2.0",
+		"drizzle-kit": "^0.19.13",
+		"mobx-devtools-mst": "0.9.30",
+		"prettier": "3.0.3",
+		"rollup-plugin-analyzer": "4.0.0",
+		"sass": "1.69.5",
+		"tsconfig": "workspace:*",
+		"typescript": "5.2.2",
+		"vite": "5.0.0",
+		"vite-plugin-html": "3.2.0"
+	},
+	"description": "Wundernut13 Frontend",
+	"main": "vite.config.js",
+	"author": "@urbanisierung",
+	"license": "UNLICENSED"
+}

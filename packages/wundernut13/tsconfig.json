@@ -1,0 +1,10 @@
+{
+  "extends": "tsconfig/backend.json",
+  "include": ["src/**/*.ts"],
+  "exclude": ["dist", "node_modules", "src/cli.ts", "src/tests/*"],
+  "compilerOptions": {
+    "outDir": "dist",
+    "isolatedModules": false,
+    "types": ["node"]
+  }
+}
