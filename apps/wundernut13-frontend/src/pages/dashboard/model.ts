@@ -1,6 +1,4 @@
-import {
-	Wundernut
-} from "@urbanisierung/wundernut13"
+import { Wundernut } from "@urbanisierung/wundernut13"
 import { types } from "mobx-state-tree"
 import { getRootStore } from "../../models/helpers"
 
@@ -16,6 +14,10 @@ export const DashboardPage = types
 		error: types.optional(types.string, ""),
 		inputJson: types.optional(types.string, ""),
 		accordionOpen: types.optional(types.string, "text-area"),
+		state: types.optional(types.string, "idle"),
+		possiblePathsToReachGoal: types.array(types.string),
+		possiblePathsToWin: types.array(types.string),
+		resultString: types.optional(types.string, ""),
 	})
 	.actions((self) => {
 		const init = () => {}
@@ -27,6 +29,8 @@ export const DashboardPage = types
 			self.directions.clear()
 			self.mazeSteps.clear()
 			self.mazeAsString = ""
+			self.state = "idle"
+			self.resultString = ""
 		}
 
 		const generateMaze = (maze: any) => {
@@ -34,8 +38,10 @@ export const DashboardPage = types
 			self.mazeAsString = ""
 			self.directions.clear()
 			self.mazeSteps.clear()
+			self.possiblePathsToReachGoal.clear()
+			self.possiblePathsToWin.clear()
 			try {
-				self.mazeAsString =  Wundernut.getMazeAsString(maze)
+				self.mazeAsString = Wundernut.getMazeAsString(maze)
 			} catch (_error) {
 				// ignore
 			}
@@ -43,12 +49,24 @@ export const DashboardPage = types
 				const wundernut = new Wundernut({
 					maze,
 				})
-				const shortestPath = wundernut.getShortestPath()
-				if (shortestPath) {
-					self.directions.push(...shortestPath.directions)
-					self.mazeSteps.push(...wundernut.getAllMazeStepsAsString())
+				const result = wundernut.getResult()
+				if (result.result === "win") {
+					self.state = "win"
+					self.directions.push(...result.directions)
+					self.mazeSteps.push(...result.allMazeStepsOfShortestPath)
+					self.possiblePathsToReachGoal.push(
+						...result.allPossiblePathsToReachGoalAsMazeString,
+					)
+					self.possiblePathsToWin.push(
+						...result.allPossiblePathsToWinAsMazeString,
+					)
+				} else {
+					self.state = "lose"
+					self.mazeSteps.push(result.originalMaze)
 				}
+				self.resultString = JSON.stringify(result, null, 2)
 			} catch (error: any) {
+				self.state = "error"
 				self.error = error.message
 			}
 		}
@@ -115,49 +133,87 @@ export const DashboardPage = types
 			return false
 		}
 
-		const getMazeStep = (): string => {
-			const output: string[] = []
-			if (self.error) {
-				output.push(self.error)
-				output.push("")
-				output.push(self.mazeAsString)
-			} else if (self.inputJson.length === 0) {
-				output.push(
-					"Add the maze as a json. Use these elements: 🟫, 🟩, ❎, 🏃 and 🐉.",
-				)
-				output.push("")
-				output.push(self.mazeAsString)
-			} else if (self.mazeSteps.length === 0) {
-				output.push(`🐉 wins! No path for our 🏃...`)
-				output.push("")
-				output.push(self.mazeAsString)
-			} else {
-				output.push(
-					`🏃 wins in ${self.directions.length} steps! Press Run to see it in action!`,
-				)
-				output.push(
-					self.directions
-						.map((direction) => {
-							switch (direction) {
-								case "right":
-									return "→"
-								case "left":
-									return "←"
-								case "up":
-									return "↑"
-								case "down":
-									return "↓"
-								default:
-									return ""
-							}
-						})
-						.join(" "),
-				)
-				output.push("")
-				output.push(self.mazeSteps[self.step])
+		const getDescription = (): string[] | undefined => {
+			let description: string[] | undefined = []
+			switch (self.state) {
+				case "idle":
+					description.push(
+						"Add the maze as a json. Use these elements: 🟫, 🟩, ❎, 🏃 and 🐉.",
+					)
+					break
+				case "win":
+					description.push(
+						`🏃 wins in ${self.directions.length} steps! Press Run to see it in action!`,
+					)
+					description.push(
+						self.directions
+							.map((direction) => {
+								switch (direction) {
+									case "right":
+										return "→"
+									case "left":
+										return "←"
+									case "up":
+										return "↑"
+									case "down":
+										return "↓"
+									default:
+										return ""
+								}
+							})
+							.join(" "),
+					)
+					break
+				case "lose":
+					description.push(`🐉 wins! No path for our 🏃...`)
+					break
+				case "error":
+					description.push(self.error)
+					break
+				default:
+					description = undefined
 			}
-			return output.join("\n")
+			return description
 		}
 
-		return { loading, getMazeStep }
+		const getMazeStep = (): string | undefined => {
+			switch (self.state) {
+				case "idle":
+					return undefined
+				case "win":
+					return self.mazeSteps[self.step]
+				case "lose":
+					return self.mazeAsString
+				case "error":
+					return self.mazeAsString
+				default:
+					return undefined
+			}
+		}
+
+		const getPossiblePathsToReachGoal = (): string[] | undefined => {
+			switch (self.state) {
+				case "win":
+					return self.possiblePathsToReachGoal
+				default:
+					return undefined
+			}
+		}
+
+		const getPossiblePathsToWin = (): string[] | undefined => {
+			switch (self.state) {
+				case "win":
+					return self.possiblePathsToWin
+				default:
+					return undefined
+			}
+		}
+
+		return {
+			loading,
+			getMazeStep,
+			getDescription,
+			getPossiblePathsToReachGoal,
+			getPossiblePathsToWin,
+		}
 	})

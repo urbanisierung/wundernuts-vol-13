@@ -12,6 +12,7 @@ import { EXAMPLES } from "@urbanisierung/wundernut13"
 import { observer } from "mobx-react-lite"
 import { useTranslation } from "react-i18next"
 import { useMst } from "../../models/root"
+import { downloadFile } from "./download.utils"
 
 export default observer(() => {
 	const { t } = useTranslation("home")
@@ -123,17 +124,71 @@ export default observer(() => {
 					</Button>
 					<Button
 						onClick={() => dashboard.runMaze()}
-						disabled={dashboard.directions.length === 0}
+						disabled={dashboard.state !== "win"}
 					>
 						Run
 					</Button>
+					<Button
+						kind="tertiary"
+						onClick={() =>
+							downloadFile({
+								fileName: `submission-by-urbanisierung-wundernuts-vol-13-result-${Date.now()}.json`,
+								content: dashboard.resultString,
+								mimeType: "application/json",
+							})
+						}
+						disabled={dashboard.state === "error" || dashboard.state === "idle"}
+					>
+						Gimme the Data!
+					</Button>
 				</div>
 			</Tile>
-			<Tile>
-				<div style={{ textAlign: "center" }}>
-					<pre>{dashboard.getMazeStep()}</pre>
-				</div>
-			</Tile>
+			{dashboard.getDescription() && (
+				<Tile>
+					<div style={{ textAlign: "center" }}>
+						{dashboard.getDescription()!.map((description, index) => (
+							<p key={`description-${index}`}>{description}</p>
+						))}
+					</div>
+				</Tile>
+			)}
+			{dashboard.getMazeStep() && (
+				<Tile>
+					<div style={{ textAlign: "center" }}>
+						<pre>{dashboard.getMazeStep()}</pre>
+					</div>
+				</Tile>
+			)}
+			{dashboard.getPossiblePathsToWin() && (
+				<Tile>
+					<p>
+						{dashboard.getPossiblePathsToWin()!.length} possible path(s) to{" "}
+						<strong>win</strong>:
+					</p>
+					<div style={{ textAlign: "center" }}>
+						<div style={{ display: "grid", gap: "0.5rem" }}>
+							{dashboard.getPossiblePathsToWin()!.map((path, index) => (
+								<pre key={`possible-path-win-${index}`}>{path}</pre>
+							))}
+						</div>
+					</div>
+				</Tile>
+			)}
+			{dashboard.getPossiblePathsToReachGoal() && (
+				<Tile>
+					<p>
+						{dashboard.getPossiblePathsToReachGoal()!.length} Possible path(s)
+						to <strong>reach goal</strong>:
+					</p>
+					<div style={{ textAlign: "center" }}>
+						<div style={{ display: "grid", gap: "0.5rem" }}>
+							{dashboard.getPossiblePathsToReachGoal()!.map((path, index) => (
+								<pre key={`possible-path-goal-${index}`}>{path}</pre>
+							))}
+						</div>
+					</div>
+				</Tile>
+			)}
 		</Stack>
 	)
 
