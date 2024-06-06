@@ -3,6 +3,7 @@ import {
 	AccordionItem,
 	Button,
 	ClickableTile,
+	FileUploader,
 	Link,
 	Stack,
 	TextArea,
@@ -69,7 +70,7 @@ export default observer(() => {
 			<Tile>
 				<Accordion>
 					<AccordionItem
-						title="Paste JSON"
+						title="Paste Maze JSON"
 						onClick={() => {
 							dashboard.updateAccordionItem("text-area")
 						}}
@@ -85,6 +86,48 @@ export default observer(() => {
 								dashboard.updateInputJson(event.target.value)
 							}
 							rows={15}
+						/>
+					</AccordionItem>
+					<AccordionItem
+						title="Upload Maze JSON"
+						onClick={() => {
+							dashboard.updateAccordionItem("upload")
+						}}
+						open={dashboard.accordionOpen === "upload"}
+					>
+						<FileUploader
+							labelTitle="Upload"
+							labelDescription="Upload a Maze JSON file"
+							buttonLabel="Upload Maze JSON"
+							buttonKind="primary"
+							size="md"
+							filenameStatus="edit"
+							role="button"
+							accept={[".json"]}
+							multiple={false}
+							disabled={false}
+							iconDescription="Remove file"
+							name=""
+							onChange={(event) => {
+								const file =
+									event?.target?.files && event.target.files.length > 0
+										? event.target.files[0]
+										: null
+								if (file) {
+									const fileReader = new FileReader()
+									fileReader.onload = (onLoadEvent) => {
+										const mazeJson: string =
+											(onLoadEvent?.target?.result as string) ?? ""
+										dashboard.updateInputJson(mazeJson)
+									}
+									fileReader.readAsText(file)
+								} else {
+									// ignore
+								}
+							}}
+							onDelete={() => {
+								dashboard.clearInputJson()
+							}}
 						/>
 					</AccordionItem>
 					<AccordionItem
