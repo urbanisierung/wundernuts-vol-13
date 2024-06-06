@@ -123,7 +123,11 @@ export class Wundernut {
       log(`\n${data.directions.length} steps to win:`)
       log(data.directions.join(' '))
     } else {
-      log('Dragon wins.')
+      log('Dragon wins :(((')
     }
+
+    log(
+      `\nNavigate to https://wundernut13.urbanisierung.dev to play with a 🥳 UI for this submission!`,
+    )
   }
 }
