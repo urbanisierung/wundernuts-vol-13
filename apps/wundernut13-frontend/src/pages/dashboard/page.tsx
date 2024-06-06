@@ -3,6 +3,7 @@ import {
 	AccordionItem,
 	Button,
 	ClickableTile,
+	FileUploader,
 	Link,
 	Stack,
 	TextArea,
@@ -12,6 +13,7 @@ import { EXAMPLES } from "@urbanisierung/wundernut13"
 import { observer } from "mobx-react-lite"
 import { useTranslation } from "react-i18next"
 import { useMst } from "../../models/root"
+import { downloadFile } from "./download.utils"
 
 export default observer(() => {
 	const { t } = useTranslation("home")
@@ -68,7 +70,7 @@ export default observer(() => {
 			<Tile>
 				<Accordion>
 					<AccordionItem
-						title="Paste JSON"
+						title="Paste Maze JSON"
 						onClick={() => {
 							dashboard.updateAccordionItem("text-area")
 						}}
@@ -84,6 +86,48 @@ export default observer(() => {
 								dashboard.updateInputJson(event.target.value)
 							}
 							rows={15}
+						/>
+					</AccordionItem>
+					<AccordionItem
+						title="Upload Maze JSON"
+						onClick={() => {
+							dashboard.updateAccordionItem("upload")
+						}}
+						open={dashboard.accordionOpen === "upload"}
+					>
+						<FileUploader
+							labelTitle="Upload"
+							labelDescription="Upload a Maze JSON file"
+							buttonLabel="Upload Maze JSON"
+							buttonKind="primary"
+							size="md"
+							filenameStatus="edit"
+							role="button"
+							accept={[".json"]}
+							multiple={false}
+							disabled={false}
+							iconDescription="Remove file"
+							name=""
+							onChange={(event) => {
+								const file =
+									event?.target?.files && event.target.files.length > 0
+										? event.target.files[0]
+										: null
+								if (file) {
+									const fileReader = new FileReader()
+									fileReader.onload = (onLoadEvent) => {
+										const mazeJson: string =
+											(onLoadEvent?.target?.result as string) ?? ""
+										dashboard.updateInputJson(mazeJson)
+									}
+									fileReader.readAsText(file)
+								} else {
+									// ignore
+								}
+							}}
+							onDelete={() => {
+								dashboard.clearInputJson()
+							}}
 						/>
 					</AccordionItem>
 					<AccordionItem
@@ -123,17 +167,71 @@ export default observer(() => {
 					</Button>
 					<Button
 						onClick={() => dashboard.runMaze()}
-						disabled={dashboard.directions.length === 0}
+						disabled={dashboard.state !== "win"}
 					>
 						Run
 					</Button>
+					<Button
+						kind="tertiary"
+						onClick={() =>
+							downloadFile({
+								fileName: `submission-by-urbanisierung-wundernuts-vol-13-result-${Date.now()}.json`,
+								content: dashboard.resultString,
+								mimeType: "application/json",
+							})
+						}
+						disabled={dashboard.state === "error" || dashboard.state === "idle"}
+					>
+						Gimme the Data!
+					</Button>
 				</div>
 			</Tile>
-			<Tile>
-				<div style={{ textAlign: "center" }}>
-					<pre>{dashboard.getMazeStep()}</pre>
-				</div>
-			</Tile>
+			{dashboard.getDescription() && (
+				<Tile>
+					<div style={{ textAlign: "center" }}>
+						{dashboard.getDescription()!.map((description, index) => (
+							<p key={`description-${index}`}>{description}</p>
+						))}
+					</div>
+				</Tile>
+			)}
+			{dashboard.getMazeStep() && (
+				<Tile>
+					<div style={{ textAlign: "center" }}>
+						<pre>{dashboard.getMazeStep()}</pre>
+					</div>
+				</Tile>
+			)}
+			{dashboard.getPossiblePathsToWin() && (
+				<Tile>
+					<p>
+						{dashboard.getPossiblePathsToWin()!.length} possible path(s) to{" "}
+						<strong>win</strong>:
+					</p>
+					<div style={{ textAlign: "center" }}>
+						<div style={{ display: "grid", gap: "0.5rem" }}>
+							{dashboard.getPossiblePathsToWin()!.map((path, index) => (
+								<pre key={`possible-path-win-${index}`}>{path}</pre>
+							))}
+						</div>
+					</div>
+				</Tile>
+			)}
+			{dashboard.getPossiblePathsToReachGoal() && (
+				<Tile>
+					<p>
+						{dashboard.getPossiblePathsToReachGoal()!.length} Possible path(s)
+						to <strong>reach goal</strong>:
+					</p>
+					<div style={{ textAlign: "center" }}>
+						<div style={{ display: "grid", gap: "0.5rem" }}>
+							{dashboard.getPossiblePathsToReachGoal()!.map((path, index) => (
+								<pre key={`possible-path-goal-${index}`}>{path}</pre>
+							))}
+						</div>
+					</div>
+				</Tile>
+			)}
 		</Stack>
 	)
 

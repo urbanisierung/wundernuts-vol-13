@@ -29,7 +29,7 @@ This repo is a monorepo that basically contains two assets: the [algorithm](./pa
 
 ## 💻 Some dev/run instructions
 
-### Prerequisites
+### ⚙️ Prerequisites
 
 - You need Node installed, >= v20 --> [Download Node.js](https://nodejs.org/en/download/package-manager)
 - Package manager is `pnpm` --> `npm i -g pnpm`
@@ -44,7 +44,7 @@ v20.8.1
 9.1.4
 ```
 
-### Install the dependencies
+### 🔥 Install the dependencies
 
 Projects from Node-land tend to use dozens of thousands of dependencies, I try to avoid it. Nevertheless, there are some:
 
@@ -70,9 +70,13 @@ pnpm run wundernutui
 
 And then navigate to [localhost:4300](http://localhost:4300).
 
+Final step: hf!
+
 ## 🌴 Some (maybe useful, maybe not - who knows) background info
 
-I was on vacation with my family and read about the wundernut on a social channel. Since the ride home by car took several hours (south of Europe to Germany) and my wife is an excellent driver, I could work on the submission on the passenger seat. Win-win - I really enjoyed to implement the approach and the time flew by, and my wife saved some time listening to me when I was in the tunnel, haha xD
+I was on vacation with my family and read about the wundernut on a social channel. Since the ride home by car took several hours (south of Europe to Germany) and my wife is an excellent driver, I could work on the submission on the passenger seat. Win-win - I really enjoyed to crack the nur and the time flew by, and my wife saved some time listening to me when I was in the tunnel, haha xD
+
+So I finished the core logic on the ride, and found some time afterwards to clean it up. No time left to check for further traps in the challenge (I'm 100% sure there are some hidden ones).
 
 ## 🗒️ Acknowledgements
 
