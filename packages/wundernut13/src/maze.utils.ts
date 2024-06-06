@@ -164,6 +164,11 @@ export function runAllPathsAndReturnShortestPath(options: {
   dragon: Coordinate
 }): ShortestPath | undefined {
   let shortestPath: ShortestPath | undefined = undefined
+  const allPaths: Array<{
+    hero: Coordinate[]
+    dragon: Coordinate[]
+    directions: Direction[]
+  }> = []
 
   for (const path of options.paths) {
     const result = runPath({
@@ -178,19 +183,37 @@ export function runAllPathsAndReturnShortestPath(options: {
           start: options.hero,
           path,
         })
-        if (
-          !shortestPath ||
-          shortestPath.directions.length > directionsForPath.length
-        ) {
-          shortestPath = {
-            directions: directionsForPath,
-            hero: result.paths.hero,
-            dragon: result.paths.dragon,
-          }
-        }
+        allPaths.push({
+          hero: result.paths.hero,
+          dragon: result.paths.dragon,
+          directions: directionsForPath,
+        })
         break
       case 'lose':
         break
+    }
+  }
+
+  if (allPaths.length > 0) {
+    let indexOfShortestPath = 0
+    shortestPath = {
+      hero: allPaths[indexOfShortestPath].hero,
+      dragon: allPaths[indexOfShortestPath].dragon,
+      directions: allPaths[indexOfShortestPath].directions,
+      allPaths,
+    }
+    for (let index = 1; index < allPaths.length; index++) {
+      if (
+        allPaths[index].hero.length < allPaths[indexOfShortestPath].hero.length
+      ) {
+        shortestPath = {
+          hero: allPaths[index].hero,
+          dragon: allPaths[index].dragon,
+          directions: allPaths[index].directions,
+          allPaths,
+        }
+        indexOfShortestPath = index
+      }
     }
   }
 
@@ -408,6 +431,7 @@ export function generateMazeWithCoordinates(options: {
   maze: ELEMENT[][]
   hero: Coordinate
   dragon: Coordinate
+  path?: Coordinate[]
 }): ELEMENT[][] {
   const maze: ELEMENT[][] = options.maze.map((row) => {
     return row.map((element) => {
@@ -422,6 +446,13 @@ export function generateMazeWithCoordinates(options: {
   })
   maze[options.hero.x][options.hero.y] = ELEMENT.HERO
   maze[options.dragon.x][options.dragon.y] = ELEMENT.DRAGON
+  if (options.path) {
+    for (const coordinate of options.path) {
+      if (maze[coordinate.x][coordinate.y] === ELEMENT.WAY) {
+        maze[coordinate.x][coordinate.y] = ELEMENT.PATH
+      }
+    }
+  }
   return maze
 }
 

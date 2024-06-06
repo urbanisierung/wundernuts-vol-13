@@ -4,6 +4,7 @@ export enum ELEMENT {
   WAY = '🟩',
   WALL = '🟫',
   DRAGON = '🐉',
+  PATH = '🟦', // only for logging the possible paths
 }
 
 export interface Input {
@@ -35,6 +36,11 @@ export interface ShortestPath {
   hero: Coordinate[]
   dragon: Coordinate[]
   directions: Direction[]
+  allPaths: Array<{
+    hero: Coordinate[]
+    dragon: Coordinate[]
+    directions: Direction[]
+  }>
 }
 
 export type Direction = 'right' | 'down' | 'left' | 'up'

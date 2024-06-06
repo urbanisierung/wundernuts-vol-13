@@ -74,6 +74,8 @@ And then navigate to [localhost:4300](http://localhost:4300).
 
 I was on vacation with my family and read about the wundernut on a social channel. Since the ride home by car took several hours (south of Europe to Germany) and my wife is an excellent driver, I could work on the submission on the passenger seat. Win-win - I really enjoyed to implement the approach and the time flew by, and my wife saved some time listening to me when I was in the tunnel, haha xD
 
+So I finished the core logic on the ride, and found some time afterwards to clean it up. No time left to check for further traps in the challenge (I'm 100% sure there are some).
+
 ## 🗒️ Acknowledgements
 
 The project setup seems a bit overloaded, and you're totally right! But remember: I was in a car with an unstable internet connection. I re-used a monorepo setup I re-use for most of my projects to bootstrap the project.
