@@ -29,7 +29,7 @@ This repo is a monorepo that basically contains two assets: the [algorithm](./pa
 
 ## 💻 Some dev/run instructions
 
-### Prerequisites
+### ⚙️ Prerequisites
 
 - You need Node installed, >= v20 --> [Download Node.js](https://nodejs.org/en/download/package-manager)
 - Package manager is `pnpm` --> `npm i -g pnpm`
@@ -44,7 +44,7 @@ v20.8.1
 9.1.4
 ```
 
-### Install the dependencies
+### 🔥 Install the dependencies
 
 Projects from Node-land tend to use dozens of thousands of dependencies, I try to avoid it. Nevertheless, there are some:
 
